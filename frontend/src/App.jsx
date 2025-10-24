@@ -1,12 +1,9 @@
-import React from "react";
-import VideoCall from "./components/VideoCall";
+import React from 'react'
 
-function App() {
+const App = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex justify-center items-center">
-      <VideoCall />
-    </div>
-  );
+    <div>App</div>
+  )
 }
 
-export default App;
+export default App
