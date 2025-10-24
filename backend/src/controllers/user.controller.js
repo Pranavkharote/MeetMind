@@ -28,7 +28,7 @@ const register = async (req, res) => {
 
         await newUser.save();
         res.status(httpStatus.CREATED).json({
-         
+  
             message:"User Created!"
         })
     }
