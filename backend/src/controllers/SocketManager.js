@@ -5,17 +5,24 @@ let messages = {};
 let timeOnline = {};
 
 const connectToSocket = (server) => {
-  const io = new Server(server);
+  const io = new Server(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["*"],
+      credentials: true,
+    },
+  });
 
   io.on("connection", (socket) => {
     socket.on("join-call", (path) => {
       if (connections[path] === undefined) {
         connections[path] = [];
       }
-      connections[socket.id] = new Date();
+      timeOnline[socket.id] = new Date();
 
       for (let a = 0; a < connections[path].length; a++) {
-        io.to(connectToSocket[path][a]).emit("user-joined", socket.id);
+        io.to(connections[path][a]).emit("user-joined", socket.id);
       }
       if (messages[path] !== undefined) {
         for (let a = 0; a < messages[path].length; ++a) {
@@ -54,7 +61,7 @@ const connectToSocket = (server) => {
         });
         console.log("message", key, ":", sender, data);
 
-        connections[matchingRoom].array.forEach((element) => {
+        connections[matchingRoom].forEach((element) => {
           io.to(element).emit("chat-message", data, sender, socket.id);
         });
       }
